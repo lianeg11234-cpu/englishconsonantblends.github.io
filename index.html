@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>✨ Blend Flashcard Deck | BL, BR, CL, CR, DR, FL, FR, GL, GR ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* clean card feel */
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e2b2f 0%, #1b3b3f 100%);
+            font-family: 'Segoe UI', 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .flashcard-app {
+            max-width: 750px;
+            width: 100%;
+            background: #fffbf0;
+            border-radius: 72px;
+            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 245, 200, 0.8);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .app-header {
+            background: #ffaa55;
+            padding: 20px 20px;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 0 #b45f1a;
+        }
+
+        .app-header h1 {
+            font-size: 1.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .app-header p {
+            font-size: 0.9rem;
+            margin-top: 6px;
+            opacity: 0.95;
+        }
+
+        .card-container {
+            padding: 35px 25px 30px;
+            background: #fef7e8;
+        }
+
+        .flashcard {
+            background: #ffffff;
+            border-radius: 64px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15), inset 0 1px 4px #fff5e6;
+            padding: 40px 20px 45px;
+            text-align: center;
+            transition: 0.2s ease;
+            border: 2px solid #ffd8a5;
+        }
+
+        .blend-badge {
+            background: #ffd966;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #4a2c12;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .word-emoji {
+            font-size: 6rem;
+            display: block;
+            margin: 10px 0 5px;
+            filter: drop-shadow(6px 8px 0 rgba(0, 0, 0, 0.1));
+        }
+
+        .word-text {
+            font-size: 3.4rem;
+            font-weight: 800;
+            background: #fef1df;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 90px;
+            color: #c26a1a;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            box-shadow: inset 0 -3px 0 #ffcf8a, 0 6px 12px rgba(0,0,0,0.03);
+        }
+
+        .blend-highlight-card {
+            background: #ffc77a;
+            padding: 0 8px;
+            border-radius: 40px;
+            color: #2f2416;
+        }
+
+        .pronounce-btn {
+            background: #60935d;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 60px;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #2d5730;
+            transition: 0.05s linear;
+            font-family: inherit;
+        }
+
+        .pronounce-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #2d5730;
+        }
+
+        /* navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #f5a623;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 10px 22px;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 0 #b4641a;
+            transition: 0.05s linear;
+            font-family: inherit;
+        }
+
+        .nav-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #b4641a;
+        }
+
+        .counter {
+            background: #e9ddb0;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #654321;
+        }
+
+        .shuffle-btn {
+            background: #5a7d6c;
+            box-shadow: 0 4px 0 #2e5a48;
+        }
+
+        footer {
+            background: #f4e5d2;
+            text-align: center;
+            padding: 14px;
+            font-size: 0.75rem;
+            color: #8b6946;
+            border-top: 1px solid #ffe0bb;
+        }
+
+        @media (max-width: 550px) {
+            .word-text { font-size: 2.1rem; padding: 6px 15px; }
+            .word-emoji { font-size: 4rem; }
+            .pronounce-btn { font-size: 1rem; padding: 8px 18px; }
+            .nav-btn { padding: 6px 14px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="flashcard-app">
+    <div class="app-header">
+        <h1>
+            🃏 Blend Flashcard Deck
+            <span>🔊</span>
+        </h1>
+        <p>BL · BR · CL · CR · DR · FL · FR · GL · GR | 45 words with emojis</p>
+    </div>
+    <div class="card-container">
+        <div class="flashcard" id="flashcard">
+            <div id="blendBadge" class="blend-badge">BL Blend</div>
+            <div id="cardEmoji" class="word-emoji">⚫🐈‍⬛</div>
+            <div id="cardWord" class="word-text">black</div>
+            <button id="speakBtn" class="pronounce-btn">🔊 Listen & Say</button>
+        </div>
+
+        <div class="nav-bar">
+            <button id="prevBtn" class="nav-btn">◀ PREV</button>
+            <div class="counter" id="counter">1 / 45</div>
+            <button id="nextBtn" class="nav-btn">NEXT ▶</button>
+            <button id="shuffleBtn" class="nav-btn shuffle-btn">🔄 SHUFFLE</button>
+        </div>
+    </div>
+    <footer>
+        🧠 Tap the card or press LISTEN to hear pronunciation. Click SHUFFLE to randomize order. Master those blends!
+    </footer>
+</div>
+
+<script>
+    // ------------------------------------------------------------
+    // Complete word list from the provided sets (BL, BR, CL, CR, DR, FL, FR, GL, GR)
+    // each item: word, emoji, blend (group)
+    // ------------------------------------------------------------
+    const wordsDatabase = [
+        // BL blend
+        { word: "black", emoji: "⚫🐈‍⬛", blend: "BL" },
+        { word: "blue", emoji: "🔵💙", blend: "BL" },
+        { word: "block", emoji: "🧱📦", blend: "BL" },
+        { word: "blink", emoji: "👁️✨", blend: "BL" },
+        { word: "blanket", emoji: "🛌🧣", blend: "BL" },
+        // BR blend
+        { word: "brush", emoji: "🪥🎨", blend: "BR" },
+        { word: "bread", emoji: "🍞🥖", blend: "BR" },
+        { word: "brown", emoji: "🟤🐻", blend: "BR" },
+        { word: "broom", emoji: "🧹🧙", blend: "BR" },
+        { word: "brick", emoji: "🧱🏠", blend: "BR" },
+        // CL blend
+        { word: "clap", emoji: "👏🎉", blend: "CL" },
+        { word: "clock", emoji: "⏰🕰️", blend: "CL" },
+        { word: "clip", emoji: "📎✂️", blend: "CL" },
+        { word: "cloud", emoji: "☁️⛅", blend: "CL" },
+        { word: "clean", emoji: "🧼✨🧹", blend: "CL" },
+        // CR blend
+        { word: "crab", emoji: "🦀🌊", blend: "CR" },
+        { word: "crown", emoji: "👑✨", blend: "CR" },
+        { word: "cry", emoji: "😢💧", blend: "CR" },
+        { word: "crayon", emoji: "🖍️🎨", blend: "CR" },
+        { word: "cream", emoji: "🍦🥛", blend: "CR" },
+        // DR blend
+        { word: "drum", emoji: "🥁🎵", blend: "DR" },
+        { word: "dress", emoji: "👗💃", blend: "DR" },
+        { word: "dragon", emoji: "🐉🔥", blend: "DR" },
+        { word: "drop", emoji: "💧⬇️", blend: "DR" },
+        { word: "drive", emoji: "🚗🛣️", blend: "DR" },
+        // FL blend
+        { word: "flag", emoji: "🏁🚩", blend: "FL" },
+        { word: "flower", emoji: "🌸🌻", blend: "FL" },
+        { word: "flip", emoji: "🔄🤸", blend: "FL" },
+        { word: "fly", emoji: "🪰🕊️✈️", blend: "FL" },
+        { word: "floor", emoji: "🚪⬇️🧹", blend: "FL" },
+        // FR blend
+        { word: "frog", emoji: "🐸💚", blend: "FR" },
+        { word: "fruit", emoji: "🍎🍌🍊", blend: "FR" },
+        { word: "frame", emoji: "🖼️📷", blend: "FR" },
+        { word: "fries", emoji: "🍟🍟", blend: "FR" },
+        { word: "fresh", emoji: "🌿✨🥬", blend: "FR" },
+        // GL blend
+        { word: "glass", emoji: "🥛🔍", blend: "GL" },
+        { word: "glue", emoji: "🫙🧴✂️", blend: "GL" },
+        { word: "glove", emoji: "🧤⚾", blend: "GL" },
+        { word: "glow", emoji: "💡✨🌟", blend: "GL" },
+        { word: "glad", emoji: "😊👍", blend: "GL" },
+        // GR blend
+        { word: "green", emoji: "🟢🍃", blend: "GR" },
+        { word: "grape", emoji: "🍇🍇", blend: "GR" },
+        { word: "grass", emoji: "🌿🌱", blend: "GR" },
+        { word: "grow", emoji: "🌱📈", blend: "GR" },
+        { word: "grab", emoji: "🫱🎁", blend: "GR" }
+    ];
+
+    // Total 45 words: verify length
+    console.log("Total flashcards:", wordsDatabase.length); // 45
+
+    // Main flashcard deck array (will be shuffled and iterated)
+    let deck = [...wordsDatabase];
+    let currentIndex = 0;
+
+    // DOM elements
+    const blendBadge = document.getElementById("blendBadge");
+    const cardEmoji = document.getElementById("cardEmoji");
+    const cardWord = document.getElementById("cardWord");
+    const speakBtn = document.getElementById("speakBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    const counterSpan = document.getElementById("counter");
+
+    // Helper: highlight blend inside word (e.g., "black" -> BL + "ack")
+    function formatWordWithBlend(word, blend) {
+        const lowerWord = word.toLowerCase();
+        const blendLower = blend.toLowerCase();
+        if (lowerWord.startsWith(blendLower)) {
+            const remaining = word.slice(blend.length);
+            return `<span class="blend-highlight-card" style="background:#ffc77a; padding:0 6px; border-radius:30px;">${blend}</span>${remaining}`;
+        }
+        return word;
+    }
+
+    // Update the flashcard UI based on current deck and index
+    function updateCard() {
+        const cardData = deck[currentIndex];
+        if (!cardData) return;
+        
+        // update blend badge
+        blendBadge.textContent = `${cardData.blend} Blend`;
+        // emoji
+        cardEmoji.textContent = cardData.emoji;
+        // word with highlighted blend
+        const formattedWord = formatWordWithBlend(cardData.word, cardData.blend);
+        cardWord.innerHTML = formattedWord;
+        
+        // update counter
+        counterSpan.textContent = `${currentIndex + 1} / ${deck.length}`;
+    }
+
+    // Speech function
+    function speakCurrentWord() {
+        if (!window.speechSynthesis) {
+            alert("Your browser does not support speech synthesis. Please use Chrome, Edge, or Safari.");
+            return;
+        }
+        const word = deck[currentIndex].word;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = "en-US";
+        utterance.rate = 0.85;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Navigation
+    function nextCard() {
+        if (currentIndex < deck.length - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // loop to start
+        }
+        updateCard();
+        animateCardFlip();
+    }
+
+    function prevCard() {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = deck.length - 1; // loop to end
+        }
+        updateCard();
+        animateCardFlip();
+    }
+
+    // Shuffle the deck, reset to first card
+    function shuffleDeck() {
+        // Fisher-Yates shuffle on a copy of original database (preserve original order but shuffle current deck)
+        const newDeck = [...deck];
+        for (let i = newDeck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
+        }
+        deck = newDeck;
+        currentIndex = 0;
+        updateCard();
+        // visual feedback on shuffle
+        const flash = document.querySelector('.flashcard');
+        flash.style.transform = 'scale(0.98)';
+        setTimeout(() => { flash.style.transform = ''; }, 150);
+        // also optional speak hint
+        const feedbackMsg = document.createElement('div');
+        // short temporary effect (not intrusive)
+    }
+
+    // Small animation for card flip feel
+    function animateCardFlip() {
+        const card = document.querySelector('.flashcard');
+        card.style.transform = 'scale(0.99)';
+        card.style.transition = '0.07s';
+        setTimeout(() => {
+            card.style.transform = '';
+        }, 80);
+    }
+
+    // Reset to original order (optional via double tap? but shuffle already randomizes; we can add an extra hidden reset? not needed but user can shuffle to reorder)
+    // For extra friendliness: we provide shuffle only. but if someone wants original order, they can refresh page. That's okay.
+    // Better add "reset order" double click header? not necessary, but we can include a small 'reset order' button? Not requested but might help.
+    // I'll add a secondary reset link? simplicity, shuffle is enough but I'll add a tiny reset to original via hidden gesture? but not needed.
+    
+    // Additionally, to improve experience, also make card clickable for audio
+    const flashcardDiv = document.querySelector('.flashcard');
+    flashcardDiv.addEventListener('click', (e) => {
+        // avoid double trigger if click on speak button
+        if (e.target === speakBtn || speakBtn.contains(e.target)) return;
+        speakCurrentWord();
+    });
+
+    // Event listeners
+    speakBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakCurrentWord();
+    });
+    prevBtn.addEventListener('click', prevCard);
+    nextBtn.addEventListener('click', nextCard);
+    shuffleBtn.addEventListener('click', () => {
+        shuffleDeck();
+        // optional speak "shuffled"
+        if (window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance("Shuffled!");
+            utterance.lang = "en-US";
+            utterance.rate = 1;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+    });
+
+    // Keyboard support: left/right arrows
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevCard();
+            e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+            nextCard();
+            e.preventDefault();
+        } else if (e.key === ' ' || e.key === 'Space') {
+            speakCurrentWord();
+            e.preventDefault();
+        }
+    });
+
+    // Initialize with original order (no shuffle initially, but showing first card)
+    // However to keep first card consistent, we keep deck as original wordsDatabase
+    // But we can also optionally show first card's blend highlight correct.
+    deck = [...wordsDatabase];
+    currentIndex = 0;
+    updateCard();
+
+    // Small touch to show blend highlight correctly for all cards: the format function works.
+
+    // Also if the word doesn't start with blend? In our data all words exactly start with the blend (bl, br, cl, cr, dr, fl, fr, gl, gr). Example: "brush" starts with br, "black" starts with bl. Perfect.
+    // Edge case: "fly" starts with fl, "cry" starts with cr etc. safe.
+
+    // Provide a little message for users who tap the blend badge? Not needed but cute.
+    blendBadge.style.cursor = 'pointer';
+    blendBadge.addEventListener('click', () => {
+        const blendSound = deck[currentIndex].blend.toLowerCase();
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(`${blendSound} blend`);
+            utter.lang = "en-US";
+            utter.rate = 0.9;
+            window.speechSynthesis.speak(utter);
+        }
+    });
+    blendBadge.title = "Click to hear blend sound";
+
+    // responsive and ready
+</script>
+</body>
+</html>
